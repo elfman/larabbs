@@ -26,4 +26,9 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function isAuthor($obj)
+    {
+        return $this->id == $obj->user_id;
+    }
 }
