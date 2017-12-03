@@ -31,4 +31,9 @@ class User extends Authenticatable
     {
         return $this->id == $obj->user_id;
     }
+
+    public function topics()
+    {
+        return $this->hasMany(Topic::class);
+    }
 }
