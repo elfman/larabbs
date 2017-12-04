@@ -30,9 +30,9 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function isAuthor($obj)
+    public function isAuthorOf($model)
     {
-        return $this->id == $obj->user_id;
+        return $this->id === $model->user_id;
     }
 
     public function topics()

@@ -64,27 +64,29 @@
                         {!! $topic->body !!}
                     </div>
 
-                    <div class="operate">
-                        <hr>
-                        <a href="{{ route('topics.edit', $topic->id) }}" class="btn btn-default btn-xs" role="button">
-                            <i class="glyphicon glyphicon-edit"></i> 编辑
-                        </a>
-                        <a href="{{ route('topics.destroy', $topic->id) }}" class="btn btn-default btn-xs" role="button" onclick="event.preventDefault();$('#delete-form').submit()">
-                            <i class="glyphicon glyphicon-trash"></i> 删除
-                        </a>
-                        <form action="{{ route('topics.destroy', $topic->id) }}" method="POST" id="delete-form">
-                            {{ csrf_field() }}
-                            {{ method_field('DELETE') }}
-                        </form>
-                    </div>
+                    @can('update', $topic)
+                        <div class="operate">
+                            <hr>
+                            <a href="{{ route('topics.edit', $topic->id) }}" class="btn btn-default btn-xs" role="button">
+                                <i class="glyphicon glyphicon-edit"></i> 编辑
+                            </a>
+                            <a href="{{ route('topics.destroy', $topic->id) }}" class="btn btn-default btn-xs" role="button" onclick="event.preventDefault();$('#delete-form').submit()">
+                                <i class="glyphicon glyphicon-trash"></i> 删除
+                            </a>
+                            <form action="{{ route('topics.destroy', $topic->id) }}" method="POST" id="delete-form">
+                                {{ csrf_field() }}
+                                {{ method_field('DELETE') }}
+                            </form>
+                        </div>
+                    @endcan
                 </div>
             </div>
 
             <div class="panel panel-default topic-reply">
                 <div class="panel-body">
-                    @includeWhen(Auth::check(), 'topics._reply_box', compact('topic'))
+                    @includeWhen(Auth::check(), 'topics._reply_box', ['topic' => $topic])
 
-                    @include('topics._reply_list', ['replies' => $topic->replies()->with('user')->recent()->paginate(10)])
+                    @include('topics._reply_list', ['replies' => $topic->replies()->recent()->with('user', 'topic')->paginate(10)])
                 </div>
             </div>
         </div>
