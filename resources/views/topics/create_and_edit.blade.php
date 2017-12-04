@@ -8,6 +8,9 @@
         var editor = new E('#editor');
         var $textarea = $('#textarea');
         $textarea.hide();
+        editor.customConfig.onchange = function (html) {
+            $textarea.val(html);
+        };
         editor.customConfig.uploadImgServer = '{{ route('topics.upload_image') }}';
         editor.customConfig.uploadImgParams = {
             _token: '{{ csrf_token() }}'
@@ -15,9 +18,6 @@
         editor.customConfig.uploadFileName = 'upload_images[]';
         editor.create();
         editor.txt.html($textarea.val());
-        editor.customConfig.onchange = function (html) {
-            $textarea.val(html);
-        };
     </script>
 @endsection
 
