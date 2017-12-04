@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="@yield('description', 'LaraBBS 爱好者社区')">
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -14,6 +15,8 @@
     <script src="//cdn.bootcss.com/vue/2.5.9/vue.js"></script>
     <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.css">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    @yield('style')
 
 </head>
 <body>
