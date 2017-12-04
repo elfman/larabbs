@@ -5,11 +5,16 @@
 
     <script type="text/javascript">
         var E = window.wangEditor;
-        var editor = new E('#wang');
-        var $textarea = $('#editor');
+        var editor = new E('#editor');
+        var $textarea = $('#textarea');
         editor.customConfig.onchange = function (html) {
             $textarea.val(html);
         };
+        editor.customConfig.uploadImgServer = '{{ route('topics.upload_image') }}';
+        editor.customConfig.uploadImgParams = {
+            _token: '{{ csrf_token() }}'
+        };
+        editor.customConfig.uploadFileName = 'upload_images[]';
         editor.create();
         $textarea.val(editor.txt.html());
     </script>
@@ -57,8 +62,8 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <div id="wang">{{ old('body', $topic->body ) }}</div>
-                        <textarea name="body" id="editor" class="form-control" rows="3" placeholder="请至少填写3个字符" required style="display: none"></textarea>
+                        <div id="editor">{{ old('body', $topic->body ) }}</div>
+                        <textarea name="body" id="textarea" class="form-control" rows="3" placeholder="请至少填写3个字符" required style="display: none"></textarea>
                     </div>
 
                     <div class="well well-sm">

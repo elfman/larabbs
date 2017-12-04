@@ -10,7 +10,7 @@ class ImageUploadHandler
 
     public function save($file, $folder, $file_prefix, $max_width = false)
     {
-        $folder_name = "uploads/images/$folder/" . date('Ym', time()) . '/'.date('d', time()).'/';
+        $folder_name = "uploads/images/$folder/" . date('Ym', time()) . '/' . date('d', time());
         $upload_path = public_path() . '/' . $folder_name;
         $extension = strtolower($file->getClientOriginalExtension()) ?: 'png';
         $filename = $file_prefix . '_' . time() . '_' . str_random(10) . '.' . $extension;
