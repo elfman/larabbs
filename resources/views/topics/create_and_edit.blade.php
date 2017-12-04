@@ -8,16 +8,16 @@
         var editor = new E('#editor');
         var $textarea = $('#textarea');
         $textarea.hide();
-        editor.customConfig.onchange = function (html) {
-            $textarea.val(html);
-        };
         editor.customConfig.uploadImgServer = '{{ route('topics.upload_image') }}';
         editor.customConfig.uploadImgParams = {
             _token: '{{ csrf_token() }}'
         };
         editor.customConfig.uploadFileName = 'upload_images[]';
         editor.create();
-        $textarea.val(editor.txt.html());
+        editor.txt.html($textarea.val());
+        editor.customConfig.onchange = function (html) {
+            $textarea.val(html);
+        };
     </script>
 @endsection
 
@@ -56,15 +56,15 @@
                     </div>
                     <div class="form-group">
                         <select class="form-control" name="category_id" required>
-                            <option value="" hidden disabled selected>请选择分类</option>
+                            <option value="" hidden disabled {{ $topic->id ? '' : 'selected' }}>请选择分类</option>
                             @foreach($categories as $value)
-                                <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                <option value="{{ $value->id }}" {{ $topic->category_id === $value->id ? 'selected' : '' }}>{{ $value->name }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="form-group">
-                        <div id="editor">{{ old('body', $topic->body ) }}</div>
-                        <textarea name="body" id="textarea" class="form-control" rows="3" placeholder="请至少填写3个字符" required></textarea>
+                        <div id="editor"></div>
+                        <textarea name="body" id="textarea" class="form-control" rows="3" placeholder="请至少填写3个字符" required>{{ old('body', $topic->body ) }}</textarea>
                     </div>
 
                     <div class="well well-sm">
