@@ -7,6 +7,7 @@
         var E = window.wangEditor;
         var editor = new E('#editor');
         var $textarea = $('#textarea');
+        $textarea.hide();
         editor.customConfig.onchange = function (html) {
             $textarea.val(html);
         };
@@ -63,7 +64,7 @@
                     </div>
                     <div class="form-group">
                         <div id="editor">{{ old('body', $topic->body ) }}</div>
-                        <textarea name="body" id="textarea" class="form-control" rows="3" placeholder="请至少填写3个字符" required style="display: none"></textarea>
+                        <textarea name="body" id="textarea" class="form-control" rows="3" placeholder="请至少填写3个字符" required></textarea>
                     </div>
 
                     <div class="well well-sm">
