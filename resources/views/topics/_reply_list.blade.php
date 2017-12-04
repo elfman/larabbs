@@ -29,3 +29,5 @@
         <hr>
     @endforeach
 </div>
+
+{!! $replies->render() !!}

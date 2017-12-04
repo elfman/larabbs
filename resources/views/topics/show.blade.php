@@ -4,6 +4,28 @@
 
 @section('description', $topic->excerpt)
 
+@section('script')
+    <script src="//cdn.bootcss.com/wangEditor/10.0.13/wangEditor.min.js"></script>
+
+    <script type="text/javascript">
+        var E = window.wangEditor;
+        var editor = new E('#editor');
+        var $textarea = $('#textarea');
+        $('#editor').show();
+        $textarea.hide();
+        editor.customConfig.onchange = function (html) {
+            $textarea.val(html);
+        };
+        editor.customConfig.uploadImgServer = '{{ route('topics.upload_image') }}';
+        editor.customConfig.uploadImgParams = {
+            _token: '{{ csrf_token() }}'
+        };
+        editor.customConfig.uploadFileName = 'upload_images[]';
+        editor.create();
+        editor.txt.html($textarea.val());
+    </script>
+@endsection
+
 @section('content')
     <div class="row">
         <div class="col-lg-3 col-md-3 hidden-sm hidden-xs author-info">
@@ -60,8 +82,9 @@
 
             <div class="panel panel-default topic-reply">
                 <div class="panel-body">
-                    @include('topics._reply_box', compact('topic'))
-                    @include('topics._reply_list', ['replies' => $topic->replies()->with('user')->get()])
+                    @includeWhen(Auth::check(), 'topics._reply_box', compact('topic'))
+
+                    @include('topics._reply_list', ['replies' => $topic->replies()->with('user')->recent()->paginate(10)])
                 </div>
             </div>
         </div>

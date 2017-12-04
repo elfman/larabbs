@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('script')
-    <script src="//unpkg.com/wangeditor/release/wangEditor.min.js"></script>
+    <script src="//cdn.bootcss.com/wangEditor/10.0.13/wangEditor.min.js"></script>
 
     <script type="text/javascript">
         var E = window.wangEditor;
