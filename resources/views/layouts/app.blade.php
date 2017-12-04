@@ -13,9 +13,8 @@
     <script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.js"></script>
     <script src="//cdn.bootcss.com/vue/2.5.9/vue.js"></script>
     <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.css">
-
-    <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
 </head>
 <body>
     <div id="app" class="{{ route_class() }}-page">
@@ -31,5 +30,6 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
+@yield('script')
 </body>
 </html>
