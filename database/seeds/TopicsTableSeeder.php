@@ -23,7 +23,7 @@ class TopicsTableSeeder extends Seeder
             ->each(function ($topic, $index) use ($user_ids, $category_ids, $faker, $handler) {
             $topic->user_id = $faker->randomElement($user_ids);
             $topic->category_id = $faker->randomElement($category_ids);
-            $topic->slug = $handler->translate($topic->title);
+            $topic->slug = str_replace(' ', '-', strtolower($topic->title));
         });
 
         Topic::insert($topics->toArray());
