@@ -12,4 +12,13 @@ Route::group([
 
     $router->get('/', 'HomeController@index');
 
+//    $router->get('/users/index', "UserController@index");
+//    $router->get('/topics/index', 'TopicController@index');
+//    $router->get('/replies/index', 'ReplyController@index');
+    $router->resources([
+        'users' => UserController::class,
+        'topics' => TopicController::class,
+        'replies' => ReplyController::class,
+    ]);
+//    $router->resource('topics', TopicController::class);
 });
