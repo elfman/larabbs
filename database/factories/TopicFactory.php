@@ -15,5 +15,6 @@ $factory->define(App\Models\Topic::class, function (Faker $faker) {
         'excerpt' => $sentence,
         'created_at' => $created_at,
         'updated_at' => $updated_at,
+        'view_count' => rand(1, 1000),
     ];
 });

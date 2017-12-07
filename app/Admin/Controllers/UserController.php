@@ -24,8 +24,8 @@ class UserController extends Controller
     public function index()
     {
         return Admin::content(function (Content $content) {
-            $content->header('header');
-            $content->description('description');
+            $content->header('论坛用户');
+            $content->description('列表');
 
             $content->body($this->grid());
         });
@@ -41,8 +41,8 @@ class UserController extends Controller
     {
         return Admin::content(function (Content $content) use ($id) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('论坛用户');
+            $content->description('编辑');
 
             $content->body($this->form()->edit($id));
         });
@@ -57,8 +57,8 @@ class UserController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('论坛用户');
+            $content->description('新建');
 
             $content->body($this->form());
         });
@@ -109,7 +109,6 @@ class UserController extends Controller
                     return 'images/avatar/' . date('Ym', time()) . '/' . date('d', time());
                 })
                 ->name(function ($file) use ($form) {
-                    Log::info(get_class_methods($form));
                     $extension = strtolower($file->getClientOriginalExtension()) ?: 'png';
                     $filename = $form->model()->id . '_' . time() . '_' . str_random(10) . '.' . $extension;
                     return $filename;

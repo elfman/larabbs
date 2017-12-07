@@ -19,7 +19,7 @@ class ReplyObserver
         $topic = $reply->topic;
         $topic->increment('reply_count', 1);
 
-        if (!$reply->user->isAuthor($topic)) {
+        if (!$reply->user->isAuthorOf($topic)) {
             $topic->user->notify(new TopicReplied($reply));
         }
     }

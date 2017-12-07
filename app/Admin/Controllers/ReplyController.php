@@ -10,6 +10,7 @@ use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\ModelForm;
+use Illuminate\Support\Facades\Request;
 
 class ReplyController extends Controller
 {
@@ -23,9 +24,8 @@ class ReplyController extends Controller
     public function index()
     {
         return Admin::content(function (Content $content) {
-
-            $content->header('header');
-            $content->description('description');
+            $content->header('回复');
+            $content->description('列表');
 
             $content->body($this->grid());
         });
@@ -41,8 +41,8 @@ class ReplyController extends Controller
     {
         return Admin::content(function (Content $content) use ($id) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('回复');
+            $content->description('修改');
 
             $content->body($this->form()->edit($id));
         });
@@ -57,8 +57,8 @@ class ReplyController extends Controller
     {
         return Admin::content(function (Content $content) {
 
-            $content->header('header');
-            $content->description('description');
+            $content->header('回复');
+            $content->description('新建');
 
             $content->body($this->form());
         });
@@ -72,11 +72,23 @@ class ReplyController extends Controller
     protected function grid()
     {
         return Admin::grid(Reply::class, function (Grid $grid) {
+            $topic_id = Request::get('topic_id');
+            if ($topic_id > 0) {
+                $grid->model()->where('topic_id', $topic_id);
+            }
 
+            $grid->model()->orderBy('created_at', 'DESC');
+            $grid->model()->with('topic');
+            $grid->model()->with('user');
             $grid->id('ID')->sortable();
 
-            $grid->created_at();
-            $grid->updated_at();
+            $grid->column('topic.title', '帖子');
+            $grid->column('user.name', '回复者');
+            $grid->column('内容')->display(function () {
+                return $this->content;
+            });
+
+            $grid->created_at('回复时间');
         });
     }
 
@@ -88,11 +100,16 @@ class ReplyController extends Controller
     protected function form()
     {
         return Admin::form(Reply::class, function (Form $form) {
+            $form->model()->with('user')->with('topic');
 
             $form->display('id', 'ID');
+            $form->display('topic.title', '帖子');
+            $form->display('user.name', '回复者');
 
-            $form->display('created_at', 'Created At');
-            $form->display('updated_at', 'Updated At');
+            $form->editor('content', '内容');
+
+            $form->display('created_at', '创建时间');
+            $form->display('updated_at', '最后更新');
         });
     }
 }
