@@ -12,7 +12,7 @@
             <div class="text-center">活跃用户</div>
             <hr>
             @foreach($active_users as $active_user)
-                <a href="{{ route('users.show', $active_user->id) }}">
+                <a class="media" href="{{ route('users.show', $active_user->id) }}">
                     <div class="media-left media-middle">
                         <img src="{{ $active_user->avatar }}" alt="{{ $active_user->name }}" width="24px" height="24px" class="img-circle media-object">
                     </div>
