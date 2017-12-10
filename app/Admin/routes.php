@@ -19,6 +19,7 @@ Route::group([
         'users' => UserController::class,
         'topics' => TopicController::class,
         'replies' => ReplyController::class,
+        'links' => LinkController::class,
     ]);
 //    $router->resource('topics', TopicController::class);
 });
