@@ -23,18 +23,17 @@ trait ActiveUserHelper
     public function getActiveUsers()
     {
         return Cache::remember($this->cache_key, $this->cache_expire_in_minutes, function () {
-            return $this->cacheActiveUsers();
+            return $this->calculateAndCacheActiveUsers();
         });
     }
 
     public function calculateAndCacheActiveUsers()
     {
-        $active_users = $this->calculateAcitveUsers();
-
+        $active_users = $this->calculateActiveUsers();
         $this->cacheActiveUsers($active_users);
     }
 
-    public function calculateAcitveUsers()
+    public function calculateActiveUsers()
     {
         $this->calculateTopicScore();
         $this->calculateReplyScore();
