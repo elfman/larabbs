@@ -38,3 +38,7 @@ Route::post('upload_image', 'TopicsController@uploadImage')->name('topics.upload
 Route::resource('replies', 'RepliesController', ['only' => ['store', 'destroy']]);
 
 Route::resource('notifications', 'NotificationsController', ['only' => ['index']]);
+
+Route::get('/oauth/github', 'AuthController@redirectToProvider')->name('oauth.github.redirect');
+Route::get('/oauth/github/callback', 'AuthController@handleProviderCallback')->name('oauth.github.callback');
+Route::get('/oauth/github/unbind', 'AuthController@unbind')->name('oauth.github.unbind');

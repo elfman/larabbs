@@ -418,12 +418,31 @@ body {
   color: inherit;
 }
 
-.register-page #captcha {
+.register-page .oauth label,
+.login-page .oauth label {
+  text-align: right;
+  padding-top: 4px;
+}
+
+.register-page .oauth a,
+.login-page .oauth a {
+  color: inherit;
+}
+
+.register-page .oauth i,
+.login-page .oauth i {
+  margin-right: 8px;
+  font-size: 24px;
+}
+
+.register-page #captcha,
+.login-page #captcha {
   width: 120px;
   display: inline-block;
 }
 
-.register-page img.captcha {
+.register-page img.captcha,
+.login-page img.captcha {
   margin-left: 15px;
   height: 34px;
   cursor: pointer;

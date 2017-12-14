@@ -37,6 +37,14 @@
                             <img src="{{ $user->avatar }}" alt="{{ $user->name }}" class="thumbnail img-responsive" width="200">
                         @endif
                     </div>
+                    <div class="well well-sm oauth">
+                        <i class="fa fa-github" style="font-size: 25px;"></i> github 账号 &nbsp;&nbsp;
+                        @if ($user->github_id)
+                            <a href="{{ route('oauth.github.unbind') }}" class="btn btn-default btn-sm" role="button">解绑</a>
+                        @else
+                            <a href="{{ route('oauth.github.redirect') }}" class="btn btn-default btn-sm" role="button">绑定</a>
+                        @endif
+                    </div>
                     <div class="well well-sm">
                         <button type="submit" class="btn btn-primary">保存</button>
                     </div>

@@ -65,7 +65,21 @@ body {
   }
 }
 
-.register-page {
+.register-page, .login-page {
+  .oauth {
+    label {
+      text-align: right;
+      padding-top: 4px;
+    }
+
+    a {
+      color: inherit;
+    }
+    i {
+      margin-right: 8px;
+      font-size: 24px;
+    }
+  }
   #captcha {
     width: 120px;
     display: inline-block;
