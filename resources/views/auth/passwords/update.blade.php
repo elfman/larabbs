@@ -13,7 +13,7 @@
                     <div class="panel-body">
                         <form action="{{ route('users.modifyPassword') }}" method="POST" class="form-horizontal">
                             {{ csrf_field() }}
-
+                            @if (Auth::user()->password != 'from_oauth')
                             <div class="form-group{{ $errors->has('old_password') ? ' has-error' : '' }}">
                                 <label for="old_password" class="col-md-4 control-label">旧密码</label>
                                 <div class="col-md-6">
@@ -25,6 +25,8 @@
                                     @endif
                                 </div>
                             </div>
+                            @endif
+
                             <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                                 <label for="password" class="col-md-4 control-label">新密码</label>
                                 <div class="col-md-6">
