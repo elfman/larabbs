@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Handlers\ImageUploadHandler;
+use App\Http\Requests\ModifyPasswordRequest;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
@@ -13,6 +16,7 @@ class UsersController extends Controller
     {
         $this->middleware('auth', ['except' => ['show']]);
     }
+
     public function show(User $user)
     {
         return view('users.show', compact('user'));
@@ -41,4 +45,5 @@ class UsersController extends Controller
         $user->update($data);
         return redirect()->route('users.show', $user->id)->with('success', '个人资料更新成功！');
     }
+
 }

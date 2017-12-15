@@ -27,6 +27,8 @@ Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm'
 Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 Route::post('password/reset', 'Auth\ResetPasswordController@reset');
+Route::get('password/update', 'Auth\ModifyPasswordController@updatePassword')->name('users.updatePassword');
+Route::post('password/modify', 'Auth\ModifyPasswordController@modifyPassword')->name('users.modifyPassword');
 
 Route::resource('users', 'UsersController', ['only' => ['show', 'update', 'edit']]);
 Route::resource('topics', 'TopicsController', ['only' => ['index', 'create', 'store', 'update', 'edit', 'destroy']]);

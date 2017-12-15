@@ -62,6 +62,12 @@
                                 </a>
                             </li>
                             <li>
+                                <a href="{{ route('users.updatePassword') }}">
+                                    <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
+                                    修改密码
+                                </a>
+                            </li>
+                            <li>
                                 <a href="{{ route('logout') }}"
                                    onclick="event.preventDefault();document.getElementById('logout-form').submit()">
                                     <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
