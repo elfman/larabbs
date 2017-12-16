@@ -4,6 +4,7 @@ namespace App\Models\Traits;
 
 use App\Models\Reply;
 use App\Models\Topic;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -48,9 +49,9 @@ trait ActiveUserHelper
 
         $active_users = collect();
         foreach ($users as $user_id => $user) {
-            $user = $this->find($user_id);
+            $user = User::where('id', $user_id)->first();
 
-            if (count($user)) {
+            if ($user) {
                 $active_users->push($user);
             }
         }
