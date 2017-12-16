@@ -64,21 +64,26 @@
                         {!! $topic->body !!}
                     </div>
 
-                    @can('update', $topic)
                         <div class="operate">
                             <hr>
-                            <a href="{{ route('topics.edit', $topic->id) }}" class="btn btn-default btn-xs" role="button">
-                                <i class="glyphicon glyphicon-edit"></i> 编辑
-                            </a>
-                            <a href="{{ route('topics.destroy', $topic->id) }}" class="btn btn-default btn-xs" role="button" onclick="event.preventDefault();$('#delete-form').submit()">
-                                <i class="glyphicon glyphicon-trash"></i> 删除
-                            </a>
-                            <form action="{{ route('topics.destroy', $topic->id) }}" method="POST" id="delete-form">
-                                {{ csrf_field() }}
-                                {{ method_field('DELETE') }}
-                            </form>
+                            @can('update', $topic)
+                            <div class="pull-left">
+                                <a href="{{ route('topics.edit', $topic->id) }}" class="btn btn-default btn-xs" role="button">
+                                    <i class="glyphicon glyphicon-edit"></i> 编辑
+                                </a>
+                                <a href="{{ route('topics.destroy', $topic->id) }}" class="btn btn-default btn-xs" role="button" onclick="event.preventDefault();$('#delete-form').submit()">
+                                    <i class="glyphicon glyphicon-trash"></i> 删除
+                                </a>
+                                <form action="{{ route('topics.destroy', $topic->id) }}" method="POST" id="delete-form">
+                                    {{ csrf_field() }}
+                                    {{ method_field('DELETE') }}
+                                </form>
+                            </div>
+                            @endcan
+                            <div class="pull-right">
+                                <i class="glyphicon glyphicon-eye-open"></i> {{ $topic->view_count }}
+                            </div>
                         </div>
-                    @endcan
                 </div>
             </div>
 
