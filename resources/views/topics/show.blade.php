@@ -5,6 +5,7 @@
 @section('description', $topic->excerpt)
 
 @section('script')
+    @if (Auth::check())
     <script src="//cdn.bootcss.com/wangEditor/10.0.13/wangEditor.min.js"></script>
 
     <script type="text/javascript">
@@ -24,6 +25,7 @@
         editor.create();
         editor.txt.html($textarea.val());
     </script>
+    @endif
 @endsection
 
 @section('content')
@@ -81,7 +83,8 @@
                             </div>
                             @endcan
                             <div class="pull-right">
-                                <i class="glyphicon glyphicon-eye-open"></i> {{ $topic->view_count }}
+                                <i class="glyphicon glyphicon-eye-open"></i> {{ $topic->view_count }} &nbsp; &nbsp;
+                                <topic-vote :voted={{ $topic->voted() ? 'true' : 'false'}} :vote-count="{{ $topic->upvote_count }}" url="{{ route('topics.vote', $topic->id) }}" {{ Auth::check() ? '' : ':disabled=true' }}></topic-vote>
                             </div>
                         </div>
                 </div>

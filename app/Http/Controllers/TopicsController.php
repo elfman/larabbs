@@ -6,6 +6,7 @@ use App\Handlers\ImageUploadHandler;
 use App\Models\Category;
 use App\Models\Link;
 use App\Models\Topic;
+use App\Models\Upvote;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -58,7 +59,7 @@ class TopicsController extends Controller
 		return view('topics.create_and_edit', compact('topic', 'categories'));
 	}
 
-	public function update(TopicRequest $request, Topic $topic, User $user)
+	public function update(TopicRequest $request, Topic $topic)
 	{
 	    $this->authorize('update', $topic);
 		$topic->update($request->all());
@@ -98,5 +99,38 @@ class TopicsController extends Controller
             $data['errno'] = 0;
         }
         return $data;
+	}
+
+    public function vote(Request $request, Topic $topic)
+    {
+        $user = Auth::user();
+        $action = $request->action;
+        $hasVote = Upvote::where('topic_id', $topic->id)->where('user_id', $user->id)->first() != null;
+        if ($action == 'upvote' && !$hasVote) {
+//            Topic::find($topic->id)->update(['upvote_count' => $topic->upvote_count + 1]);
+            $topic->upvote_count++;
+            $topic->save();
+            Upvote::create([
+                'topic_id' => $topic->id,
+                'user_id' => $user->id,
+            ]);
+
+            return response()->json([
+                'err' => 0,
+            ]);
+        } else if ($action == 'unvote' && $hasVote) {
+            $topic->upvote_count--;
+            $topic->save();
+            Upvote::where('topic_id', $topic->id)->where('user_id', $user->id)->delete();
+
+            return response()->json([
+                'err' => 0,
+            ]);
+        } else {
+            return response()->json([
+                'err' => 1,
+                'msg' => 'user ' . ($hasVote ? 'has voted' : 'has not vote') . ' this topic',
+            ]);
+        }
 	}
 }

@@ -168,6 +168,14 @@ body {
   }
 }
 
+.topics-show-page {
+  .topic-vote {
+    display: inline-block;
+    margin-left: 8px;
+    cursor: pointer;
+  }
+}
+
 .topic-reply {
   hr {
     margin-top: 16px;

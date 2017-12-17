@@ -15,7 +15,7 @@
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
+Vue.component('topic-vote', require('./components/TopicVoteComponent.vue'));
 
 const app = new Vue({
     el: '#app'

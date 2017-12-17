@@ -33,6 +33,7 @@ Route::post('password/modify', 'Auth\ModifyPasswordController@modifyPassword')->
 Route::resource('users', 'UsersController', ['only' => ['show', 'update', 'edit']]);
 Route::resource('topics', 'TopicsController', ['only' => ['index', 'create', 'store', 'update', 'edit', 'destroy']]);
 Route::get('topics/{topic}/{slug?}', 'TopicsController@show')->name('topics.show');
+Route::post('topics/{topic}/vote', 'TopicsController@vote')->name('topics.vote');
 
 Route::resource('categories', 'CategoriesController', ['only' => ['show']]);
 

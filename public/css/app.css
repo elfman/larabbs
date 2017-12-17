@@ -530,6 +530,12 @@ body {
   margin: 6px 0;
 }
 
+.topics-show-page .topic-vote {
+  display: inline-block;
+  margin-left: 8px;
+  cursor: pointer;
+}
+
 .topic-reply hr {
   margin-top: 16px;
   margin-bottom: 16px;

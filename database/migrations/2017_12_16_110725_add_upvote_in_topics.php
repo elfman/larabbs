@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddReferences extends Migration
+class AddUpvoteInTopics extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,18 @@ class AddReferences extends Migration
      */
     public function up()
     {
-        Schema::table('topics', function (Blueprint $table) {
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-        });
+        Schema::create('topics_upvotes', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('topic_id')->unsigned()->index();
+            $table->integer('user_id')->unsigned()->index();
+            $table->timestamps();
 
-        Schema::table('replies', function (Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->foreign('topic_id')->references('id')->on('topics')->onDelete('cascade');
+        });
+        Schema::table('topics', function (Blueprint $table) {
+            $table->integer('upvote_count')->default(0);
         });
     }
 
@@ -32,12 +36,9 @@ class AddReferences extends Migration
     public function down()
     {
         Schema::table('topics', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
+            $table->dropColumn('upvote_count');
         });
 
-        Schema::table('replies', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
-            $table->dropForeign(['topic_id']);
-        });
+        Schema::drop('topics_upvotes');
     }
 }

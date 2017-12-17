@@ -62,4 +62,9 @@ class User extends Authenticatable
         $this->save();
         $this->unreadNotifications->markAsRead();
     }
+
+    public function upvotes()
+    {
+        return $this->hasMany(Upvote::class);
+    }
 }
