@@ -30,6 +30,8 @@ class RepliesController extends Controller
 		$this->authorize('destroy', $reply);
 		$reply->delete();
 
-		return redirect()->to($reply->topic->link())->with('success', '删除成功！');
+		return response()->json([
+		    'err' => 0,
+        ]);
 	}
 }

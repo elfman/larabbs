@@ -16,6 +16,8 @@
  */
 
 Vue.component('topic-vote', require('./components/TopicVoteComponent.vue'));
+Vue.component('remove-topic', require('./components/RemoveTopicComponent.vue'));
+Vue.component('remove-reply', require('./components/RemoveReplyComponent.vue'));
 
 const app = new Vue({
     el: '#app'

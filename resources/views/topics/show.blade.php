@@ -73,13 +73,7 @@
                                 <a href="{{ route('topics.edit', $topic->id) }}" class="btn btn-default btn-xs" role="button">
                                     <i class="glyphicon glyphicon-edit"></i> 编辑
                                 </a>
-                                <a href="{{ route('topics.destroy', $topic->id) }}" class="btn btn-default btn-xs" role="button" onclick="event.preventDefault();$('#delete-form').submit()">
-                                    <i class="glyphicon glyphicon-trash"></i> 删除
-                                </a>
-                                <form action="{{ route('topics.destroy', $topic->id) }}" method="POST" id="delete-form">
-                                    {{ csrf_field() }}
-                                    {{ method_field('DELETE') }}
-                                </form>
+                                <remove-topic url="{{ route('topics.destroy', $topic->id) }}" redirect-to="{{ route('topics.index') }}"></remove-topic>
                             </div>
                             @endcan
                             <div class="pull-right">
