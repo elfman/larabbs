@@ -95,6 +95,7 @@ module.exports = __webpack_require__(11);
 Vue.component('topic-vote', __webpack_require__(2));
 Vue.component('remove-topic', __webpack_require__(15));
 Vue.component('remove-reply', __webpack_require__(18));
+Vue.component('reply', __webpack_require__(21));
 
 var app = new Vue({
   el: '#app'
@@ -947,6 +948,213 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-ebe2c3e4", module.exports)
+  }
+}
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(8)
+/* script */
+var __vue_script__ = __webpack_require__(22)
+/* template */
+var __vue_template__ = __webpack_require__(23)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/ReplyComponent.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-43c474ac", Component.options)
+  } else {
+    hotAPI.reload("data-v-43c474ac", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 22 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {
+        replyId: Number,
+        userUrl: String,
+        userId: Number,
+        username: String,
+        avatar: String,
+        createdAt: String,
+        removeUrl: String
+    },
+    data: function data() {
+        return {
+            removed: false
+        };
+    },
+
+    methods: {
+        removeReply: function removeReply() {
+            var _this = this;
+
+            $.post(this.removeUrl, {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                _method: 'DELETE'
+            }, function (data) {
+                if (data.err === 0) {
+                    _this.removed = true;
+                }
+            });
+        }
+    }
+});
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return !_vm.removed
+    ? _c("div", [
+        _c(
+          "div",
+          {
+            staticClass: "media",
+            attrs: { name: "reply" + _vm.replyId, id: "reply" + _vm.replyId }
+          },
+          [
+            _c("div", { staticClass: "avatar pull-left" }, [
+              _c("a", { attrs: { href: _vm.userUrl } }, [
+                _c("img", {
+                  staticClass: "media-object img-thumbnail",
+                  attrs: {
+                    src: _vm.avatar,
+                    alt: _vm.username,
+                    width: "48px",
+                    height: "48px"
+                  }
+                })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "infos" }, [
+              _c("div", { staticClass: "media-heading" }, [
+                _c("a", { attrs: { href: _vm.userUrl, title: _vm.username } }, [
+                  _vm._v(
+                    "\n                    " +
+                      _vm._s(_vm.username) +
+                      "\n                "
+                  )
+                ]),
+                _vm._v(" "),
+                _c("span", [_vm._v(" •  ")]),
+                _vm._v(" "),
+                _c(
+                  "span",
+                  { staticClass: "meta", attrs: { title: _vm.createdAt } },
+                  [_vm._v(_vm._s(_vm.createdAt))]
+                ),
+                _vm._v(" "),
+                _vm.removeUrl
+                  ? _c("span", { staticClass: "meta pull-right" }, [
+                      _c(
+                        "button",
+                        {
+                          ref: "btn",
+                          staticClass: "btn btn-default btn-xs pull-left",
+                          attrs: { type: "submit" },
+                          on: { click: _vm.removeReply }
+                        },
+                        [_c("i", { staticClass: "glyphicon glyphicon-trash" })]
+                      )
+                    ])
+                  : _vm._e()
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "reply-content" },
+                [_vm._t("default", [_vm._v("-- Empty --")])],
+                2
+              )
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c("hr")
+      ])
+    : _vm._e()
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-43c474ac", module.exports)
   }
 }
 
