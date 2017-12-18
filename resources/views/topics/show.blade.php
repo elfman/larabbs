@@ -5,27 +5,7 @@
 @section('description', $topic->excerpt)
 
 @section('script')
-    @if (Auth::check())
     <script src="//cdn.bootcss.com/wangEditor/10.0.13/wangEditor.min.js"></script>
-
-    <script type="text/javascript">
-        var E = window.wangEditor;
-        var editor = new E('#editor');
-        var $textarea = $('#textarea');
-        $('#editor').show();
-        $textarea.hide();
-        editor.customConfig.onchange = function (html) {
-            $textarea.val(html);
-        };
-        editor.customConfig.uploadImgServer = '{{ route('topics.upload_image') }}';
-        editor.customConfig.uploadImgParams = {
-            _token: '{{ csrf_token() }}'
-        };
-        editor.customConfig.uploadFileName = 'upload_images[]';
-        editor.create();
-        editor.txt.html($textarea.val());
-    </script>
-    @endif
 @endsection
 
 @section('content')
@@ -86,8 +66,6 @@
 
             <div class="panel panel-default topic-reply">
                 <div class="panel-body">
-                    @includeWhen(Auth::check(), 'topics._reply_box', ['topic' => $topic])
-
                     @include('topics._reply_list', ['replies' => $topic->replies()->recent()->with('user', 'topic')->paginate(10)])
                 </div>
             </div>

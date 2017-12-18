@@ -16,4 +16,13 @@ class Reply extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function toReply()
+    {
+        return $this->belongsTo(Reply::class);
+    }
+
+    public function toUser()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

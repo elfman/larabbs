@@ -96,6 +96,7 @@ Vue.component('topic-vote', __webpack_require__(2));
 Vue.component('remove-topic', __webpack_require__(15));
 Vue.component('remove-reply', __webpack_require__(18));
 Vue.component('reply', __webpack_require__(21));
+Vue.component('reply-list', __webpack_require__(24));
 
 var app = new Vue({
   el: '#app'
@@ -1036,20 +1037,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: {
-        replyId: Number,
-        userUrl: String,
-        userId: Number,
-        username: String,
-        avatar: String,
-        createdAt: String,
-        removeUrl: String
+        reply: Object
     },
     data: function data() {
         return {
-            removed: false
+            removed: false,
+            editorContent: null,
+            replying: false,
+            editorCreated: false,
+            replyEditor: null
         };
     },
 
@@ -1057,12 +1072,44 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         removeReply: function removeReply() {
             var _this = this;
 
-            $.post(this.removeUrl, {
+            $.post(this.reply.remove_url, {
                 _token: $('meta[name="csrf-token"]').attr('content'),
                 _method: 'DELETE'
             }, function (data) {
                 if (data.err === 0) {
-                    _this.removed = true;
+                    _this.$emit('removeReply', _this.reply.id);
+                }
+            });
+        },
+        showEditor: function showEditor() {
+            var _this2 = this;
+
+            this.replying = true;
+            if (!this.editorCreated) {
+                this.replyEditor = new wangEditor(this.$refs.editorElem);
+                this.replyEditor.customConfig.onchange = function (html) {
+                    _this2.editorContent = html;
+                };
+                this.replyEditor.create();
+                this.editorCreated = true;
+            }
+        },
+        dismissEditor: function dismissEditor() {
+            this.replying = false;
+        },
+        submitReply: function submitReply() {
+            var _this3 = this;
+
+            $.post(this.reply.reply_url, {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                topic_id: this.reply.topic_id,
+                body: this.editorContent,
+                to_reply: this.reply.id
+            }, function (data) {
+                if (data.err === 0) {
+                    _this3.$emit('addReply', data.reply);
+                    _this3.dismissEditor();
+                    _this3.replyEditor.text.clear();
                 }
             });
         }
@@ -1083,16 +1130,16 @@ var render = function() {
           "div",
           {
             staticClass: "media",
-            attrs: { name: "reply" + _vm.replyId, id: "reply" + _vm.replyId }
+            attrs: { name: "reply" + _vm.reply.id, id: "reply" + _vm.reply.id }
           },
           [
             _c("div", { staticClass: "avatar pull-left" }, [
-              _c("a", { attrs: { href: _vm.userUrl } }, [
+              _c("a", { attrs: { href: _vm.reply.user_url } }, [
                 _c("img", {
                   staticClass: "media-object img-thumbnail",
                   attrs: {
-                    src: _vm.avatar,
-                    alt: _vm.username,
+                    src: _vm.reply.avatar,
+                    alt: _vm.reply.username,
                     width: "48px",
                     height: "48px"
                   }
@@ -1102,45 +1149,137 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "infos" }, [
               _c("div", { staticClass: "media-heading" }, [
-                _c("a", { attrs: { href: _vm.userUrl, title: _vm.username } }, [
-                  _vm._v(
-                    "\n                    " +
-                      _vm._s(_vm.username) +
-                      "\n                "
-                  )
-                ]),
+                _c(
+                  "a",
+                  {
+                    staticStyle: { color: "#337ab7" },
+                    attrs: {
+                      href: _vm.reply.user_url,
+                      title: _vm.reply.username
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                    " +
+                        _vm._s(_vm.reply.username) +
+                        "\n                "
+                    )
+                  ]
+                ),
                 _vm._v(" "),
-                _c("span", [_vm._v(" •  ")]),
+                _c("span", [_vm._v(" • ")]),
+                _vm._v(" "),
+                _vm.reply.to_reply
+                  ? _c("span", [
+                      _c("span", [_vm._v(" 回复 ")]),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          staticStyle: { color: "#337ab7" },
+                          attrs: { href: _vm.reply.to_user_url }
+                        },
+                        [_vm._v(_vm._s(_vm.reply.to_username))]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          staticStyle: { color: "#337ab7" },
+                          attrs: { href: "#" + _vm.reply.to_reply }
+                        },
+                        [_vm._v("#" + _vm._s(_vm.reply.to_reply))]
+                      )
+                    ])
+                  : _vm._e(),
                 _vm._v(" "),
                 _c(
                   "span",
-                  { staticClass: "meta", attrs: { title: _vm.createdAt } },
-                  [_vm._v(_vm._s(_vm.createdAt))]
+                  {
+                    staticClass: "meta",
+                    attrs: { title: _vm.reply.created_at }
+                  },
+                  [_vm._v(_vm._s(_vm.reply.created_at))]
                 ),
                 _vm._v(" "),
-                _vm.removeUrl
-                  ? _c("span", { staticClass: "meta pull-right" }, [
-                      _c(
+                _c("span", { staticClass: "meta pull-right" }, [
+                  _vm.reply.can_reply && !_vm.replying
+                    ? _c(
                         "button",
                         {
-                          ref: "btn",
                           staticClass: "btn btn-default btn-xs pull-left",
+                          attrs: { type: "submit" },
+                          on: { click: _vm.showEditor }
+                        },
+                        [
+                          _c("i", { staticClass: "glyphicon glyphicon-share" }),
+                          _vm._v(" 回复\n                    ")
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.replying
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-default btn-xs pull-left",
+                          attrs: { type: "submit" },
+                          on: { click: _vm.dismissEditor }
+                        },
+                        [
+                          _c("i", { staticClass: "fa fa-close" }),
+                          _vm._v(" 关闭\n                    ")
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.reply.remove_url
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-default btn-xs",
+                          staticStyle: { "margin-left": "4px" },
                           attrs: { type: "submit" },
                           on: { click: _vm.removeReply }
                         },
-                        [_c("i", { staticClass: "glyphicon glyphicon-trash" })]
+                        [
+                          _c("i", { staticClass: "glyphicon glyphicon-trash" }),
+                          _vm._v(" 删除\n                    ")
+                        ]
                       )
-                    ])
-                  : _vm._e()
+                    : _vm._e()
+                ])
               ]),
               _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "reply-content" },
-                [_vm._t("default", [_vm._v("-- Empty --")])],
-                2
-              )
+              _c("div", {
+                staticClass: "reply-content",
+                domProps: { innerHTML: _vm._s(_vm.reply.content) }
+              })
             ])
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticStyle: { display: "none", "margin-top": "8px" },
+            style: { display: _vm.replying ? "block" : "none" }
+          },
+          [
+            _c("div", { ref: "editorElem" }),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-primary btn-sm",
+                staticStyle: { "margin-top": "8px" },
+                on: { click: _vm.submitReply }
+              },
+              [
+                _c("i", { staticClass: "fa fa-reply" }),
+                _vm._v(" 回复\n        ")
+              ]
+            )
           ]
         ),
         _vm._v(" "),
@@ -1155,6 +1294,187 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-43c474ac", module.exports)
+  }
+}
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(8)
+/* script */
+var __vue_script__ = __webpack_require__(25)
+/* template */
+var __vue_template__ = __webpack_require__(26)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/ReplyListComponent.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-947f39a8", Component.options)
+  } else {
+    hotAPI.reload("data-v-947f39a8", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 25 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {
+        replyData: String,
+        replyUrl: String,
+        topicId: Number
+    },
+    data: function data() {
+        return {
+            replyList: null,
+            replyEditor: null
+        };
+    },
+    mounted: function mounted() {
+        var _this = this;
+
+        this.replyList = JSON.parse(this.replyData);
+        if (this.replyUrl) {
+            $(function () {
+                _this.replyEditor = new window.wangEditor(_this.$refs.editorElem);
+                _this.replyEditor.customConfig.onchange = function (html) {
+                    _this.editorContent = html;
+                };
+                _this.replyEditor.create();
+            });
+        }
+    },
+
+    methods: {
+        removeReply: function removeReply(replyId) {
+            var index = this.replyList.findIndex(function (item) {
+                return item.id === replyId;
+            });
+            this.replyList.splice(index, 1);
+        },
+        addReply: function addReply(reply) {
+            this.replyList.unshift(reply);
+        },
+        replyTopic: function replyTopic() {
+            var _this2 = this;
+
+            $.post(this.replyUrl, {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                topic_id: this.topicId,
+                body: this.editorContent
+            }, function (data) {
+                if (data.err === 0) {
+                    _this2.addReply(data.reply);
+                    _this2.replyEditor.txt.clear();
+                }
+            });
+        }
+    }
+});
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _vm.replyUrl
+      ? _c("div", [
+          _c("div", { ref: "editorElem" }),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary btn-sm",
+              staticStyle: { "margin-top": "8px" },
+              on: { click: _vm.replyTopic }
+            },
+            [_c("i", { staticClass: "fa fa-reply" }), _vm._v(" 回复\n        ")]
+          )
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _c("hr"),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "reply-list" },
+      _vm._l(_vm.replyList, function(reply) {
+        return _c("reply", {
+          key: reply.id,
+          attrs: { reply: reply },
+          on: { removeReply: _vm.removeReply, addReply: _vm.addReply }
+        })
+      })
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-947f39a8", module.exports)
   }
 }
 
