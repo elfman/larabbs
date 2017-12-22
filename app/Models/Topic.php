@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
 class Topic extends Model
 {
+    use SoftDeletes;
     protected $fillable = ['title', 'body', 'category_id', 'excerpt', 'slug'];
 
     public function category()
