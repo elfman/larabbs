@@ -1,6 +1,6 @@
 <template>
     <div v-if="!removed">
-        <div class="media" :name="'reply'+reply.id" :id="'reply'+reply.id">
+        <div class="media" :name="'reply'+reply.number" :id="'reply'+reply.number">
             <div class="avatar pull-left">
                 <a :href="reply.user_url">
                     <img :src="reply.avatar" :alt="reply.username" width="48px" height="48px" class="media-object img-thumbnail">
@@ -16,9 +16,10 @@
                     <span v-if="reply.to_reply">
                         <span> 回复 </span>
                         <a :href="reply.to_user_url" style="color: #337ab7;">{{ reply.to_username }}</a>
-                        <a :href="'#' + reply.to_reply" style="color: #337ab7;">#{{ reply.to_reply }}</a>
+                        <a class="meta" :href="'#reply' + reply.to_number">{{ reply.to_number }}楼</a>
                     </span>
                     <span class="meta" :title="reply.created_at">{{ reply.created_at }}</span>
+                    <span class="meta pull-right" style="margin-left: 7px;"> {{ reply.number }}楼 </span>
                     <span class="meta pull-right">
                         <button type="submit" class="btn btn-default btn-xs pull-left" @click="showEditor" v-if="reply.can_reply && !replying">
                             <i class="glyphicon glyphicon-share"></i> 回复

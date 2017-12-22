@@ -13,6 +13,11 @@ class ReplyObserver
     public function creating(Reply $reply)
     {
         $reply->content = clean($reply->content, 'user_topic_body');
+        $number = Reply::where('topic_id', $reply->topic_id)->max('number') + 1;
+        if (!$number) {
+            $number = 1;
+        }
+        $reply->number = $number;
     }
     public function created(Reply $reply)
     {

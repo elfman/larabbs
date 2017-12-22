@@ -25,7 +25,7 @@ class RepliesController extends Controller
 	    $reply->topic_id = $request->topic_id;
 
 	    if ($request->to_reply) {
-	        $toReply = Reply::find($request->to_reply)->first();
+	        $toReply = Reply::find($request->to_reply);
 	        if (!$toReply) {
 	            return response()->json([
 	                'err' => 1,
@@ -35,7 +35,8 @@ class RepliesController extends Controller
 
             $reply->to_reply = $request->to_reply;
             $reply->to_user_id = $toReply->user_id;
-            $reply->to_username = User::find($toReply->user_id)->first()->name;
+            $reply->to_username = User::find($toReply->user_id)->name;
+            $reply->to_number = $toReply->number;
         }
 	    $reply->save();
 	    $data = replyToResponse($reply, $user);
